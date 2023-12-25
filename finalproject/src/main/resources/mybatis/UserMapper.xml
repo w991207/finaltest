@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.board.mapper.UserMapper">
+
+   <insert id="addUser" parameterType="UserDto">
+      INSERT INTO user
+      VALUES(#{email}, #{name}, #{password}, #{useraccesstoken}
+         ,#{userrefreshtoken}, #{userseqno}, #{address}, #{birth}, #{phone})
+   </insert>
+
+   <select id="loginUser" parameterType="UserDto" resultType="UserDto">
+      SELECT EMAIL, NAME, PASSWORD, USERACCESSTOKEN, USERREFRESHTOKEN,
+            USERSEQNO, ADDRESS, BIRTH, PHONE
+      FROM user
+      WHERE EMAIL=#{email} AND PASSWORD=#{password}
+   </select>
+   
+   <select id="userInfo" parameterType="String" resultType="UserDto">
+      SELECT EMAIL, NAME, ADDRESS, BIRTH, PHONE
+      FROM USER
+      WHERE EMAIL = #{email}
+   </select>
+   
+   <update id="updateUser" parameterType="UserDto">
+      UPDATE USER
+      SET EMAIL = #{email},  NAME = #{name}, ADDRESS = #{address}, BIRTH = #{birth}, PHONE = #{phone}
+      WHERE EMAIL = #{email}
+   </update>
+   
+   
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

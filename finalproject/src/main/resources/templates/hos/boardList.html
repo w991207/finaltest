@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Board List</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript">
+    function hoslist() {
+        var sgguCd = $("#sgguCd").val();
+        var dgsbjtCd = $("#dgsbjtCd").val();
+
+        $.ajax({
+                  url: "/hos/selectList",
+                  method: "get",
+                  data: { "sgguCd": sgguCd, "dgsbjtCd": dgsbjtCd },
+                  dataType: "json",
+                  success: function (data) {
+                      console.log(data);
+                      console.log(data[0].yadmNm);
+                  
+                      // Clear existing content
+                  $("#list").empty();
+                  if(data.length ==0){
+                      $("#list").append("<p><img src='/img/free-icon-exclamation-mark-8426913.png' alt='병원이 없습니다.' width='50' height='50'></p>");
+                       $("#list").append("<p>병원이 없습니다.</p>");
+                  }else{
+                     var table = "<table class='table table-bordered'><thead class='thead-dark'><tr><th scope='col'>병원 이름</th><th scope='col'>예약</th></tr></thead><tbody>";
+                         $.each(data, function (index, value) {
+                             table += "<tr><td>" + value.yadmNm+ "</td><td><button type='button' class='btn btn-sm btn-dark' onclick='reserve(\"" + value.ykiho + "\")'>예약</button></td></tr>";
+                         });
+                         
+                         table += "</tbody></table>";
+                         $("#list").append(table);
+                  }
+                      // Create and append table with Bootstrap styling
+                      
+                  },
+                  error: function () {
+                      alert("통신실패");
+                  }
+              });
+    }
+
+
+    function reserve(hospitalName) {
+        alert("예약: " + hospitalName);
+        location.href='/cal/calendar?ykiho=' + hospitalName;
+    }
+    
+    </script>
+    <style type="text/css">
+     select {
+          text-align-last: center;
+        text-align: center;
+        -ms-text-align-last: center;
+        -moz-text-align-last: center;
+        margin: 10px;
+        font-size: 18px;
+        width: 200px;
+        height: 40px;
+        padding: 8px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    select:hover {
+        border-color: black;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #818581;
+        box-shadow: 0 0 5px #818581;
+    }
+    #container {
+        text-align: center;
+    }
+    
+    form {
+        text-align: center;
+    }
+    
+    p {
+       text-align : center;
+       font-size : 25px;
+    }
+   
+   #list table {
+       width: 90%; /* Set the width as needed */
+       margin: 20px auto; /* Center the table and add margin as needed */
+       border-collapse: collapse;
+       border: 1px solid; /* Add a border to the table */
+   }
+   
+   #list th, #list td {
+       padding: 12px; /* Adjust padding as needed */
+       text-align: center;
+       font-size: 16px;
+   }
+   
+   #list th {
+       color: black; /* Text color for the header */
+       background-color: #BDBDBD; /* Background color for the header */
+   }
+   
+   
+   th, td {
+       padding: 12px;
+       text-align: center;
+       font-size: 20px;
+   }
+   
+   th {
+       color: black;
+   }
+   #list {
+      margin : 100px;
+   }
+   #list img {
+       filter: brightness(80%); /* Adjust the brightness percentage as needed */
+   }
+   button{
+      width: 80px;
+   }
+    </style>
+</head>
+<body>
+<div id="container">
+<div layout:fragment="content">
+    <span th:text="|${session.ldto.name}님이 로그인하셨습니다|" style="float: right;"></span><br>
+    <h1>검색페이지</h1>
+    <form action="#">
+  <select name="지역구" id = "sgguCd" style="font-size:15px">
+  <option value="select">지역구 선택</option>
+  <option value="110001">강남구</option>
+  <option value="110002">강동구</option>
+  <option value="110003">강서구</option>
+  <option value="110004">관악구</option>
+  <option value="110005">구로구</option>
+  <option value="110006">도봉구</option>
+  <option value="110007">동대문구</option>
+  <option value="110008">동작구</option>
+  <option value="110009">마포구</option>
+  <option value="110010">서대문구</option>
+  <option value="110011">성동구</option>
+  <option value="110012">성북구</option>
+  <option value="110013">영등포구</option>
+  <option value="110014">용산구</option>
+  <option value="110015">은평구</option>
+  <option value="110016">종로구</option>
+  <option value="110017">중구</option>
+  <option value="110018">송파구</option>
+  <option value="110019">중랑구</option>
+  <option value="110020">양천구</option>
+  <option value="110021">서초구</option>
+  <option value="110022">노원구</option>
+  <option value="110023">광진구</option>
+  <option value="110024">강북구</option>
+  <option value="110025">금천구</option>
+  </select>
+   <select name="진료과" id="dgsbjtCd" style="font-size:15px" >
+      <option value="select" >진료과목 선택</option>
+     <option value="01">내과</option>
+     <option value="02">신경과</option>
+     <option value="03">정신건강의학과</option>
+     <option value="04">외과</option>
+     <option value="05">정형외과</option>
+     <option value="06">신경외과</option>
+     <option value="07">심장혈관흉부외과</option>
+     <option value="08">성형외과</option>
+     <option value="09">마취통증의학과</option>
+     <option value="10">산부인과</option>
+     <option value="11">소아청소년과</option>
+     <option value="12">안과</option>
+     <option value="13">이비인후과</option>
+     <option value="14">피부과</option>
+     <option value="15">비뇨의학과</option>
+     <option value="16">영상의학과</option>
+     <option value="17">방사선종양학과</option>
+     <option value="18">병리과</option>
+     <option value="19">진단검사의학과</option>
+     <option value="20">결핵과</option>
+     <option value="21">재활의학과</option>
+     <option value="22">핵의학과</option>
+     <option value="23">가정의학과</option>
+     <option value="24">응급의학과</option>
+     <option value="25">직업환경의학과</option>
+     <option value="26">예방의학과</option>
+     <option value="49">치과</option>
+  </select>
+        <button type="button" onclick="hoslist()" value="제출">검색</button>
+    </form>    <div id="list">
+        <!-- Results will be displayed here -->
+    </div>
+</div>
+</div>
+</body>
+</html>

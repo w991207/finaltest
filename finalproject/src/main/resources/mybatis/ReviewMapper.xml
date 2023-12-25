@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.board.mapper.ReviewMapper">
+   
+   
+   
+   <select id="getAllList"  resultType="reviewDto">
+      SELECT rn, BOARD_SEQ, EMAIL, TITLE,HOS_NAME, CONTENT, REGDATE, REFER, READCOUNT, DELFLAG
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY refer DESC) rn,
+                   board_seq, email, title,HOS_NAME, content, regdate, refer, readcount, delflag
+               FROM BOARD WHERE DELFLAG = 'N') a
+      <where>
+         <choose>
+            <when test="board_seq!=null">
+               AND board_seq=#{board_seq}
+            </when>
+            <otherwise>
+                AND CEIL(rn/10)=#{pnum}
+            </otherwise>
+         </choose>
+   </where> 
+      ORDER BY BOARD_SEQ DESC
+   </select>
+   <insert id="insertReview" parameterType="reviewDto"
+      useGeneratedKeys="true" keyProperty="board_seq">
+      INSERT INTO BOARD
+      VALUES(NULL,#{email},#{title},#{hos_name},#{content},SYSDATE(),
+      (SELECT NVL(MAX(refer),0)+1 
+      FROM BOARD alias_for_subquery),
+       0,'N')
+   </insert>   
+   
+   
+   <update id="readCount" parameterType="int">
+      UPDATE BOARD
+      SET readcount=readcount+1
+      WHERE board_seq=#{board_seq}
+   </update>
+   
+    <select id="getBoard" parameterType="Integer" resultType="reviewDto">
+      SELECT BOARD_SEQ, EMAIL,HOS_NAME ,TITLE, CONTENT, REGDATE
+      FROM BOARD 
+      WHERE BOARD_SEQ = #{board_seq}
+   </select>
+   
+      <select id="getPCount" resultType="int">
+      SELECT CEIL(COUNT(*)/10) pageCount 
+      FROM BOARD
+      WHERE DELFLAG = "N"
+   </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
