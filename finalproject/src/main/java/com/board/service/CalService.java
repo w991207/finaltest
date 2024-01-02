@@ -69,8 +69,16 @@ public class CalService {
       return calmapper.calViewList(yyyyMM, ykiho);
    }
    
+   public boolean pay(String fintech_use_num, int money) {
+      Map<String, Object> map = new HashMap<>();
+      map.put("fintech_use_num", fintech_use_num);
+      map.put("remaining_balance", money);
+      return calmapper.pay(map);
+      
+   }
    
-   public boolean insertCalBoard(InsertCalCommand insertCalCommand, String ykiho) throws Exception {
+   
+   public boolean insertCalBoard(InsertCalCommand insertCalCommand, String ykiho, String yadmNm, int useMoney) throws Exception {
       // command --> dto로  값을 이동
       // DB에서는 mdate 컬럼 , command에서는 year, month... : 12자리로 변환작업
       String mdate=insertCalCommand.getYear()
@@ -87,15 +95,17 @@ public class CalService {
       dto.setMdate(mdate);
       dto.setEmail(insertCalCommand.getEmail());
       dto.setYkiho(ykiho);
+      dto.setYadmNm(yadmNm);
+      dto.setUseMoney(useMoney);
       
       int count=calmapper.insertCalBoard(dto);
       
       return count>0?true:false;
    }
    
-//   public List<CalDto> calBoardList(String id,String yyyyMMdd) {
-//      return calmapper.calBoardList(id,yyyyMMdd);
-//   }
+   public List<CalDto> calBoardList(String ykiho,String yyyyMMdd) {
+      return calmapper.calBoardList(ykiho,yyyyMMdd);
+   }
 //   
    public int calBoardCount(String yyyyMMdd) {
       return calmapper.calBoardCount(yyyyMMdd);
@@ -127,24 +137,22 @@ public class CalService {
 //   }
 //   
 //   public boolean insertCalReply(InsertCalReplyCommand insertCalCommand) throws Exception {
-//	     
-//	      CalDto dto=new CalDto();
-//	      dto.setSeq(insertCalCommand.getSeq());
-//	      dto.setId(insertCalCommand.getId());
-//	      dto.setContent(insertCalCommand.getContent());
-//	      
-//	      int count=calReplyMapper.insertCalReplyBoard(dto);
-//	     
-//	      return count>0?true:false;
-//	   }
+//        
+//         CalDto dto=new CalDto();
+//         dto.setSeq(insertCalCommand.getSeq());
+//         dto.setId(insertCalCommand.getId());
+//         dto.setContent(insertCalCommand.getContent());
+//         
+//         int count=calReplyMapper.insertCalReplyBoard(dto);
+//        
+//         return count>0?true:false;
+//      }
 //   
 //   
 //   public List<CalDto> showCalReply(int seq) throws Exception{    
 //       return calReplyMapper.getCalReplyBoard(seq);
 //   }
 }
-
-
 
 
 

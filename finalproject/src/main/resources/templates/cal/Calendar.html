@@ -23,7 +23,7 @@
       font-weight:bold;
       font-size:17px;
    }
-   #tbody > div > p{background-color:rgb(255, 128, 0); color:black;}
+   #tbody > div > p{background-color:rgb(128, 128, 128); color:white;}
    .cp{
       position: absolute;
       left: 20px;
@@ -71,7 +71,7 @@
    
    onload=function(){
       var ykiho = document.getElementById("ykiho").value;
-      console.log(ykiho);
+//       console.log(ykiho);
       $.ajax({
            url: "/cal/cal",
            method: "get",
@@ -100,6 +100,7 @@
    <div id="container1">
          <div id="list"></div>
       <input type="hidden" th:value="${ykiho}" id="ykiho" />
+      <input type="hidden" th:value="${yadmNm}" id="yadmNm" /> 
       <div class="cal">
          <div id="ctitle">
             <a th:href="@{/cal/calendar(year=${calMap.year-1},month=${calMap.month})}">◀</a>
@@ -121,9 +122,9 @@
             <th:block th:each="i:${#numbers.sequence(1,calMap.lastDay)}">
                <div>
                   <a class="d" th:text="${i}" th:style="'color:'+${@util.fontColor(i, calMap.dayOfWeek)}"
-                     th:href="@{/cal/calBoardList(year=${calMap.year},month=${calMap.month},date=${i})}"
+                     th:href="@{/cal/calBoardList(year=${calMap.year},month=${calMap.month},date=${i},ykiho=${ykiho},yadmNm=${yadmNm})}"
                   ></a>
-               <a th:href="@{/cal/addCalBoardForm(year=${calMap.year},month=${calMap.month},date=${i},ykiho=${ykiho})}">
+               <a th:href="@{/cal/addCalBoardForm(year=${calMap.year},month=${calMap.month},date=${i},ykiho=${ykiho},yadmNm=${yadmNm})}">
                                  <img class="pen" th:src="@{/css/pen.png}" />
                               </a>
                   [(${@util.getCalViewList(i,clist)})]

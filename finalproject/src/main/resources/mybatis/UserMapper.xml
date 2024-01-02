@@ -28,20 +28,30 @@
       WHERE EMAIL = #{email}
    </update>
    
+   <select id="userReserve" parameterType="String" resultType="CalDto">
+         SELECT YADMNM, MDATE, usemoney
+         FROM RESERVEBOARD
+         WHERE EMAIL = #{email}
+   </select>
+   
+   <insert id="addAccount" parameterType="Map">
+        INSERT INTO USERACCOUNT
+        VALUES(#{fintech_use_num}, #{money},#{bank_name},#{userseqno})
+   </insert>
+   
+   <select id="totalMoney" parameterType="int" resultType="int">
+      SELECT sum(money)
+      FROM useraccount
+      WHERE USERSEQNO = #{userseqno}
+   </select>
+   
+   
+   
+   <select id="getMyAccount" parameterType="Integer" resultType="AccountDto">
+         SELECT FINTECH_USE_NUM, MONEY, BANK_NAME, USERSEQNO
+         FROM USERACCOUNT
+         WHERE USERSEQNO = #{userseqno}
+   </select>
    
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

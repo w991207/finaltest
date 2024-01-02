@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.ReplyMapper">
+   
+   <insert id="insertReplyBoard" parameterType="ReviewDto">
+      INSERT INTO replyboard
+        VALUES (NULL, #{board_seq}, #{email}, #{content})
+   </insert>
+   
+   <select id="showReplyBoard" parameterType="Integer" resultType="ReviewDto">
+         SELECT seq, EMAIL, CONTENT
+         FROM replyboard
+         WHERE SEQ = #{board_seq}
+   </select>
+   
+</mapper>

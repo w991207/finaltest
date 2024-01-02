@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+ <style type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        #list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            margin-top: 20px; /* Added margin-top */
+        }
+
+        .box {
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+        }
+
+
+
+        p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .sub_menu {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .balance {
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .balance_amt {
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+<script type="text/javascript">
+//나의 정보조회[계좌목록]
+onload=function myInfo(){
+   $.ajax({
+//         url:"https://testapi.openbanking.or.kr/v2.0/user/me",
+//         headers:{"Authorization":"Bearer token"},
+//         data:{"user_seq_no":"사용자번호"}
+      url:"/banking/myinfo",
+      method:"get",
+      dataType:"json",
+      success:function(data){
+         console.log(data.res_list);
+         var res_list=data.res_list;//나의 계좌목록 저장
+         
+//          //계좌등록 버튼
+//          $("#list").html("<div class='addAccount'>"
+//                      +"  <button onclick='addAccount()'>계좌등록</button>"
+//                      +"</div>"
+//                        );
+         
+         //출력할 내용
+         //계좌이름
+         //핀테크이용번호 [은행이름]
+         for (var i = 0; i < res_list.length; i++) {
+            $("#list").append(
+               '<div class="box container">'
+                   +'   <div>'
+                   +'      <h1>'+res_list[i].account_alias+'</h1>'
+                   +'      <p>'+res_list[i].fintech_use_num+' 계좌번호 : ' + res_list[i].account_num_masked + ' ['+res_list[i].bank_name+']</p>'
+                   +'   </div>'
+                   +'   <div class="sub_menu"> '
+                   +'      <button  onclick="insertaccount(\''+res_list[i].fintech_use_num+'\',this)" class="balance">계좌 인증</button>'
+                   +'   </div>'
+                   +'   <div class="balance_amt"></div>'
+                   +'</div>   '
+            )
+         }
+         
+         $("#list").append('<div class="addAccount">'
+                 +'  <button onclick="addAccount()">계좌등록</button>'
+                 +'</div>')
+      }
+   });
+}
+function insertaccount(fintech_use_num) {
+
+    $.ajax({
+        url: "/banking/insertaccount",
+        method: "get",
+        data: {"fintech_use_num": fintech_use_num },
+        dataType: "json",
+        success: function (data) {
+            alert("인증이 완료되었습니다.");
+
+        },
+        error: function () {
+            alert("인증에 실패했습니다.");
+        }
+    });
+}
+
+function totalmoney(){
+   location.href="/banking/total";
+}
+
+//계좌등록하기(센터인증 이용기관용: 사용자 인증후에 계좌 등록 가능)
+function addAccount(){
+   var url="https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
+         +"response_type=code&" //고정값 code: 인증요청시 반환되는 값의 형식의미
+         +"client_id=4987e938-f84b-4e23-b0a2-3b15b00f4ffd&" //이용기관의 ID
+         +"redirect_uri=http://localhost:8087/banking/addaccount&"//응답URL
+         +"scope=login inquiry transfer&" //토큰의 권한
+         +"state=12345678123456781234567812345678&" //32자리 난수 설정
+         +"auth_type=0"; //0:최초 한번 인증, 2:인증생략
+         
+   window.open(url,"인증하기","width=400px,height=600px");      
+}
+</script>
+<style type="text/css">
+ #list > p{
+
+    float: right;
+    font-size: 50px;
+ }
+</style>
+</head>
+<body>
+
+<div layout:fragment="content">
+<h1>계좌 확인</h1>
+   <div id="list" >
+   </div>
+</div>
+</body>
+</html>

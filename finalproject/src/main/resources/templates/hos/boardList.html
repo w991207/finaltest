@@ -26,7 +26,7 @@
                   }else{
                      var table = "<table class='table table-bordered'><thead class='thead-dark'><tr><th scope='col'>병원 이름</th><th scope='col'>예약</th></tr></thead><tbody>";
                          $.each(data, function (index, value) {
-                             table += "<tr><td>" + value.yadmNm+ "</td><td><button type='button' class='btn btn-sm btn-dark' onclick='reserve(\"" + value.ykiho + "\")'>예약</button></td></tr>";
+                        	 table += "<tr><td>" + value.yadmNm + "</td><td><button type='button' class='btn btn-sm btn-dark' onclick='reserve(\"" + value.ykiho + "\", \"" + value.yadmNm + "\")'>예약</button></td></tr>";
                          });
                          
                          table += "</tbody></table>";
@@ -42,9 +42,9 @@
     }
 
 
-    function reserve(hospitalName) {
-        alert("예약: " + hospitalName);
-        location.href='/cal/calendar?ykiho=' + hospitalName;
+    function reserve(hospitalkiho, hospitalName) {
+//         alert("예약: " + hospitalkiho + "이름: " + hospitalName);
+        location.href='/cal/calendar?ykiho=' + hospitalkiho + '&yadmNm=' + hospitalName;
     }
     
     </script>
@@ -128,7 +128,6 @@
 <body>
 <div id="container">
 <div layout:fragment="content">
-    <span th:text="|${session.ldto.name}님이 로그인하셨습니다|" style="float: right;"></span><br>
     <h1>검색페이지</h1>
     <form action="#">
   <select name="지역구" id = "sgguCd" style="font-size:15px">

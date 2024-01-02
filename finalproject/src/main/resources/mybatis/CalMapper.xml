@@ -4,13 +4,13 @@
 <mapper namespace="com.board.mapper.CalMapper">
    <insert id="insertCalBoard" parameterType="CalDto">
       INSERT INTO reserveboard
-        VALUES (NULL,#{email},#{title},#{content},#{mdate},SYSDATE(),#{ykiho},'N')
+        VALUES (NULL,#{email},#{title},#{content},#{mdate},SYSDATE(),#{ykiho},'N',#{yadmNm},#{useMoney})
    </insert>
    
    <select id="calBoardList" parameterType="Map" resultType="CalDto">
-       SELECT seq, title, content, mdate,regdate
+       SELECT seq,ykiho, content, mdate,regdate,title
       FROM reserveboard
-      WHERE SUBSTRING(mdate,1,8) = #{yyyyMMdd}
+      WHERE SUBSTRING(mdate,1,8) = #{yyyyMMdd} AND YKIHO= #{ykiho}
 
    </select>
    
@@ -37,14 +37,14 @@
    </delete>
    
    <select id="calViewList" parameterType="Map" resultType="CalDto">
-	   SELECT rn, seq, email,title,content, ykiho,mdate, regdate   
-	   from   (SELECT ROW_NUMBER() over(PARTITION BY SUBSTR(mdate,1,8)
-	                                   ORDER BY mdate) rn
-	             , seq, email,title,content, ykiho,mdate, regdate
-	          FROM reserveboard
-	          WHERE ykiho = #{ykiho} AND SUBSTR(mdate,1,6)=#{yyyyMM} 
-	          ) cal
-	   WHERE rn BETWEEN 1 AND 3
+      SELECT rn, seq, email,title,content, ykiho,mdate, regdate   
+      from   (SELECT ROW_NUMBER() over(PARTITION BY SUBSTR(mdate,1,8)
+                                      ORDER BY mdate) rn
+                , seq, email,title,content, ykiho,mdate, regdate
+             FROM reserveboard
+             WHERE ykiho = #{ykiho} AND SUBSTR(mdate,1,6)=#{yyyyMM} 
+             ) cal
+      WHERE rn BETWEEN 1 AND 3
    </select>
    
    <select id="calBoardCount" parameterType="Map"
@@ -53,10 +53,14 @@
       WHERE SUBSTR(mdate,1,8)=#{yyyyMMdd}
    </select>
 
+   <update id="pay" parameterType="Map">
+      UPDATE useraccount
+      SET MONEY = #{remaining_balance}
+      WHERE FINTECH_USE_NUM=#{fintech_use_num}
+   </update>
+   
    
 </mapper>
-
-
 
 
 

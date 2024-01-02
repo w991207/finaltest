@@ -155,5 +155,3 @@ public void setMin(int min) {
    
 }
 
-
-

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+     layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+var a= 0;
+//나의 정보조회[계좌목록]
+onload=function myInfo(){
+   $.ajax({
+      url:"/banking/myinfo",
+      method:"get",
+      dataType:"json",
+      async:false,
+      success:function(data){
+         console.log(data.res_list);
+         var res_list=data.res_list;//나의 계좌목록 저장
+         
+         //계좌등록 버튼
+         $("#list").html("<div class='addAccount'>"
+                     +"  <button onclick='addAccount()'>계좌등록</button>"
+                     +"</div>"
+                       );
+         
+         //출력할 내용
+         //계좌이름
+         //핀테크이용번호 [은행이름]
+         
+            $("#list").append(
+               '<div class="box container">'
+                   +'   <div class="sub_menu"> '
+                   +'      <button onclick="totalmoney()" class="total" style="display: none;">잔액조회</button>'
+                   +'   </div>'
+                   +'   <div class="balance_amt"></div>'
+                   +'</div>   '
+            )
+         
+            $(".total").trigger('click');
+            
+         
+      }
+   });
+}
+
+//잔액조회하기
+function totalmoney(btnEle){
+   $.ajax({
+      url:"/banking/total",
+      method:"get",
+      dataType:"json",
+      async:false,
+      success:function(data){
+         $("#list").append("<p>잔액합계:"+data.toLocaleString('ko-KR')+"원</p>")
+      },
+      error:function(){
+         alert("통신실패");
+      }
+   });
+}
+
+//계좌등록하기(센터인증 이용기관용: 사용자 인증후에 계좌 등록 가능)
+function addAccount(){
+   var url="https://testapi.openbanking.or.kr/oauth/2.0/authorize?"
+         +"response_type=code&" //고정값 code: 인증요청시 반환되는 값의 형식의미
+         +"client_id=4987e938-f84b-4e23-b0a2-3b15b00f4ffd&" //이용기관의 ID
+         +"redirect_uri=http://localhost:8087/banking/addaccount&"//응답URL
+         +"scope=login inquiry transfer&" //토큰의 권한
+         +"state=12345678123456781234567812345678&" //32자리 난수 설정
+         +"auth_type=0"; //0:최초 한번 인증, 2:인증생략
+         
+   window.open(url,"인증하기","width=400px,height=600px");      
+}
+</script>
+<style type="text/css">
+ #list > p{
+
+    float: right;
+    font-size: 50px;
+ }
+</style>
+</head>
+<body>
+
+<div layout:fragment="content">
+      
+      <h3>예약현황</h3>
+      <table class="table table-bordered table-striped col-md-12" id="news" >
+         <tr>
+            <th>병원이름</th>
+            <th>예약날짜</th>
+            <th>사용금액</th>
+         </tr>   
+      <th:block th:if="${#lists.isEmpty(list)}">
+         <tr>
+            <td colspan="3" style="text-align: center;">---예약결과가 없습니다.---</td>
+         </tr>
+      </th:block>
+      <th:block th:unless="${#lists.isEmpty(list)}">
+         <tr th:each="dto:${list}">
+            <td th:text="${dto.yadmNm}"></td>
+            <td th:text="${dto.mdate}"></td>
+            <td th:text="${dto.useMoney}"></td>
+         </tr>
+      </th:block>
+   </table>
+   <div id="list" >
+   </div>
+</div>
+</body>
+</html>

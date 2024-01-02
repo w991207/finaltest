@@ -1,7 +1,12 @@
 package com.board.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
+import com.board.dtos.AccountDto;
+import com.board.dtos.CalDto;
 import com.board.dtos.UserDto;
 
 @Mapper
@@ -11,6 +16,17 @@ public interface UserMapper {
    public UserDto userInfo(String email);
    
    
-   // 정보 수정
+        // 정보 수정
       public boolean updateUser(UserDto dto);
+      
+      public List<CalDto> userReserve(String email);
+      
+      public int addAccount(Map<String, Object>map);
+      
+      public List<AccountDto> getMyAccount(int userseqno);
+      
+      
+      public int totalMoney(int userseqno);
+
+      
 }

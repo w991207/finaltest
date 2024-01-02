@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartRequest;
 
+import com.board.command.DelReviewCommand;
+import com.board.command.InsertReplyCommand;
 import com.board.command.InsertReviewCommand;
 import com.board.command.UpdateReviewCommand;
 import com.board.dtos.ReviewDto;
@@ -103,67 +105,61 @@ public class ReviewController {
       return "review/reviewDetail";
    }
 //   
-//   @PostMapping(value = "/newsBoardUpdate")
-//   public String boardUpdate(@Validated NewsUpdateBoardCommand updateBoardCommand
-//                              ,BindingResult result) {
-//      System.out.println("수정시작");
-//      if(result.hasErrors()) {
-//         System.out.println("수정내용을 모두 입력해주세요");
-//         return "news/newsBoardDetail";
-//      }
-//      newsBoardService.updateBoard(updateBoardCommand);
-//      
-//      return "redirect:/news/newsBoardDetail?board_seq="+updateBoardCommand.getBoard_seq();
-//      
-//   }
-//   
-//   @GetMapping(value = "/download")
-//   public void download(int file_seq, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-//      FileBoardDto fdto = fileService.getFileInfo(file_seq);
-//      
-//      fileService.fileDownload(fdto.getOrigin_filename(),fdto.getStored_filename(),request,response);
-//   }
-//   
-//   @RequestMapping(value="mulDel",method = {RequestMethod.GET, RequestMethod.POST})
-//   public String mulDel(@Validated NewsDelBoardCommand delBoardCommand
-//                   ,BindingResult result
-//                      , Model model,String pnum) {
-//      if(result.hasErrors()) {
-//         System.out.println("최소하나 체크하기");
-//         List<NewsBoardDto> list=newsBoardService.getAllList(pnum);
-//         model.addAttribute("list", list);
-//         return "news/newsboardList";
-//      }
-//      newsBoardService.mulDel(delBoardCommand.getSeq());
-//      System.out.println("글삭제함");
-//      return "redirect:/news/boardList";
-//   }
-//   
-//   @ResponseBody
-//   @GetMapping(value = "/addReplyBoard")
-//   public String addCalReply(@Validated InsertReplyCommand insertCommand,
-//                       BindingResult result) throws Exception {
-//      System.out.println("댓글추가");
-//      if(result.hasErrors()) {
-//         System.out.println("글을 모두 입력해야 합니다");
-//         return "news/NewsBoardDetail";
-//      }
-//      System.out.println(insertCommand);
-//      newsBoardService.insertReply(insertCommand);
-//      
-//      return "";
-//   }
-//
-//   @ResponseBody
-//   @GetMapping(value = "/showReplyBoard")
-//   public Map<String, List<NewsBoardDto>> NewsBoardList(@Validated InsertCalReplyCommand insertCalCommand, BindingResult result,  Model model, int seq) throws Exception {
-//      System.out.println("댓글 보여주기");
-//      List<NewsBoardDto> list = newsBoardService.showReply(seq);
-//      Map<String, List<NewsBoardDto>> map = new HashMap<>();
-//      map.put("list", list);
-//
-//      model.addAttribute("insertCalCommand", new InsertCalReplyCommand());
-//      
-//      return map;
-//   }
+   @PostMapping(value = "/reviewUpdate")
+   public String reviewUpdate(@Validated UpdateReviewCommand updateReviewCommand
+                              ,BindingResult result) {
+      System.out.println("수정시작");
+      if(result.hasErrors()) {
+         System.out.println("수정내용을 모두 입력해주세요");
+         return "review/reviewUpdate";
+      }
+      reviewService.updateBoard(updateReviewCommand);
+      
+      return "redirect:/review/reviewDetail?board_seq="+ updateReviewCommand.getBoard_seq();
+      
+   }
+
+  
+   @RequestMapping(value="mulDel",method = {RequestMethod.GET, RequestMethod.POST})
+   public String mulDel(@Validated DelReviewCommand delReviewCommand
+                   ,BindingResult result
+                      , Model model,String pnum) {
+      if(result.hasErrors()) {
+         System.out.println("최소하나 체크하기");
+         List<ReviewDto> list=reviewService.getAllList(pnum);
+         model.addAttribute("list", list);
+         return "review/reviewList";
+      }
+      reviewService.mulDel(delReviewCommand.getSeq());
+      System.out.println("글삭제함");
+      return "redirect:/review/reviewList";
+   }
+   
+   @ResponseBody
+   @GetMapping(value = "/addReplyBoard")
+   public String addCalReply(@Validated InsertReplyCommand insertCommand,
+                       BindingResult result) throws Exception {
+      System.out.println("댓글추가");
+      if(result.hasErrors()) {
+         System.out.println("글을 모두 입력해야 합니다");
+         return "review/reviewDetail";
+      }
+      System.out.println(insertCommand);
+      reviewService.insertReply(insertCommand);
+      
+      return "";
+   }
+
+   @ResponseBody
+   @GetMapping(value = "/showReplyBoard")
+   public Map<String, List<ReviewDto>> NewsBoardList(@Validated InsertReplyCommand insertCommand, BindingResult result,  Model model, int seq) throws Exception {
+      System.out.println("댓글 보여주기");
+      List<ReviewDto> list = reviewService.showReply(seq);
+      Map<String, List<ReviewDto>> map = new HashMap<>();
+      map.put("list", list);
+      System.out.println(list);
+      model.addAttribute("insertCommand", new InsertReplyCommand());
+      
+      return map;
+   }
 }

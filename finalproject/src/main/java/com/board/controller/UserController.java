@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.board.command.UserUpdateCommand;
+import com.board.dtos.CalDto;
 import com.board.dtos.UserDto;
 import com.board.service.UserService;
 
@@ -119,7 +121,7 @@ public class UserController {
    
    //로그인하기
    @PostMapping("/login")
-   public String login(UserDto dto, HttpServletRequest request) {
+   public String login(UserDto dto, HttpServletRequest request, Model model) {
       UserDto ldto=userService.loginUser(dto);
       if(ldto==null) {
          System.out.println("회원이 아님");
@@ -129,6 +131,9 @@ public class UserController {
          HttpSession session=request.getSession();
          session.setAttribute("ldto", ldto);//로그인 정보를 session에 저장
          session.setMaxInactiveInterval(60*10);
+         
+        
+         
          return "user/main";
       }
    }
@@ -166,9 +171,24 @@ public class UserController {
          
       }
    
+   @GetMapping(value = "/usermain")
+   public String usermain(HttpServletRequest request, Model model) {
+      HttpSession session=request.getSession();
+      String email = ((UserDto) session.getAttribute("ldto")).getEmail();
+            
+       List<CalDto> list = userService.userReserve(email);
+       System.out.println(list);
+       model.addAttribute("list", list);
+      
+      return "user/usermain";
+   }
+   
+   @GetMapping(value = "/useraccount")
+   public String useraccount() {
+      return "user/useraccount";
+   }
+   
 }
-
-
 
 
 

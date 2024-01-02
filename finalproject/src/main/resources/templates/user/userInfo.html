@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 function delUser(){
-   location.href = "/user/delUser";
+	location.href = "/user/delUser";
 }
 </script>
 <style type="text/css">
@@ -18,55 +18,52 @@ function delUser(){
 <div layout:fragment="content">
 <h1>유저 정보</h1>
 <div id="container">
-   <div class="main">
-      <div class="lead">
-      <span th:text="|${session.ldto.name}님이 로그인하셨습니다|"  style="float: right;"></span><br>
-      </div>
-      <div class="contents">
-         <div id="myinfo">
-            <form action="/user/userUpdate" method="post" >
-               <table class="table">
-                  <tr>
-                        <th>이메일</th>
-                        <td>
-                           <input type="email" name="email" th:value="${dto.email}" class="form-control"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>이름</th>
-                        <td>
-                           <input type="text" name="name" th:value="${dto.name}" class="form-control" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>주소</th>
-                        <td>
-                           <input type="text" name="address" th:value="${dto.address}" class="form-control" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>생년월일</th>
-                        <td>
-                           <input type="text" name="birth" th:value="${dto.birth}" class="form-control" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>휴대폰</th>
-                        <td>
-                           <input type="text" name="phone" th:value="${dto.phone}" class="form-control" />
-                        </td>
-                    </tr>
-                  <tr>
-                     <td colspan="2">
-                        <button type="submit">수정</button>
-                        <button type="button" onclick="delUser()">탈퇴</button>
-                     </td>
-                  </tr>
-               </table>
-            </form>
-         </div>
-      </div>
-   </div>
+	<div class="main">
+		<div class="contents">
+			<div id="myinfo">
+				<form action="/user/userUpdate" method="post" >
+					<table class="table">
+						<tr>
+					         <th>이메일</th>
+					         <td>
+					            <input type="email" name="email" th:value="${dto.email}" class="form-control"/>
+					         </td>
+					     </tr>
+					     <tr>
+					         <th>이름</th>
+					         <td>
+					            <input type="text" name="name" th:value="${dto.name}" class="form-control" />
+					         </td>
+					     </tr>
+					     <tr>
+					         <th>주소</th>
+					         <td>
+					            <input type="text" name="address" th:value="${dto.address}" class="form-control" />
+					         </td>
+					     </tr>
+					     <tr>
+					         <th>생년월일</th>
+					         <td>
+					            <input type="text" name="birth" th:value="${dto.birth}" class="form-control" />
+					         </td>
+					     </tr>
+					     <tr>
+					         <th>휴대폰</th>
+					         <td>
+					            <input type="text" name="phone" th:value="${dto.phone}" class="form-control" />
+					         </td>
+					     </tr>
+						<tr>
+							<td colspan="2">
+								<button type="submit">수정</button>
+								<button type="button" onclick="delUser()">탈퇴</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 </div>
 </body>
