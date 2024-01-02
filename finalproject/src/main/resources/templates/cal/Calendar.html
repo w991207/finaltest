@@ -48,11 +48,12 @@
          var date = aDate.text().trim(); // 일
          var yyyyMMdd = year+(month.length<2?"0"+month:month)
                               +(date.length<2?"0"+date:date); //8자리 만들기
+         var ykiho = document.getElementById("ykiho").value;
          if(aDate.nextAll("p").length>0){
             $.ajax({
                url:"/cal/calCountAjax",
                method:"get",
-               data:{"yyyyMMdd":yyyyMMdd}, // 서버로 전달하는 값
+               data:{"yyyyMMdd":yyyyMMdd,"ykiho":ykiho}, // 서버로 전달하는 값
                dataType:"json", // 서버에서 전달받은 데이터 타입
                async:false, // ajax() 메서드가 비동기로 실행되는것을 막음 : false 설정
                success:function(data){ // 성공하면 데이터가 data 변수에 저장됨

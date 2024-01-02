@@ -257,10 +257,10 @@ public class CalController {
 
        @ResponseBody
        @GetMapping(value="/calCountAjax")
-       public Map<String,Integer> calCountAjax(String yyyyMMdd){
-
+       public Map<String,Integer> calCountAjax(String yyyyMMdd,String ykiho){
+    	  System.out.println(ykiho);
           Map<String, Integer>map=new HashMap<>();
-          int count=calService.calBoardCount(yyyyMMdd);
+          int count=calService.calBoardCount(yyyyMMdd,ykiho);
           map.put("count", count);
           return map;
        }

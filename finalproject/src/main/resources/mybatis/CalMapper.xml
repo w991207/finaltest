@@ -50,7 +50,7 @@
    <select id="calBoardCount" parameterType="Map"
          resultType="Integer">
       SELECT COUNT(*) FROM reserveboard
-      WHERE SUBSTR(mdate,1,8)=#{yyyyMMdd}
+      WHERE SUBSTR(mdate,1,8)=#{yyyyMMdd} AND ykiho = #{ykiho}
    </select>
 
    <update id="pay" parameterType="Map">

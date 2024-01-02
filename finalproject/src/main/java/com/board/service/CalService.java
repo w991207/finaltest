@@ -107,8 +107,8 @@ public class CalService {
       return calmapper.calBoardList(ykiho,yyyyMMdd);
    }
 //   
-   public int calBoardCount(String yyyyMMdd) {
-      return calmapper.calBoardCount(yyyyMMdd);
+   public int calBoardCount(String yyyyMMdd,String ykiho) {
+      return calmapper.calBoardCount(yyyyMMdd,ykiho);
    }
 //
 //   public boolean calMulDel(Map<String, String[]> map) {

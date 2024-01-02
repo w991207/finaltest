@@ -25,7 +25,7 @@ public interface CalMapper {
    //한달의 일정보여주기
    public List<CalDto> calViewList(String yyyyMM, String ykiho);
    //일일의 일정개수 보여주기
-   public int calBoardCount(String yyyyMMdd);
+   public int calBoardCount(String yyyyMMdd, String ykiho);
    
    public boolean pay(Map<String, Object>map);
    
