@@ -45,6 +45,7 @@ import com.board.command.InsertCalCommand;
 import com.board.dtos.CalDto;
 import com.board.dtos.UserDto;
 import com.board.service.CalService;
+import com.board.service.UserService;
 import com.board.utils.Util;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,7 +57,8 @@ public class CalController {
    
    @Autowired
    CalService calService;
-   
+   @Autowired
+   UserService userService;
     @GetMapping(value="/calendar")
        public String calendar(Model model, HttpServletRequest request, String ykiho, String yadmNm) {
           System.out.println("병원의 예약 현황 보기");
@@ -83,7 +85,34 @@ public class CalController {
          
           return "cal/Calendar";
        }
-       
+    @GetMapping(value="/userCal")
+    public String usercalendar(Model model, HttpServletRequest request) {
+    	HttpSession session=request.getSession();
+    	String email = ((UserDto) session.getAttribute("ldto")).getEmail();
+       //달력에서 일일별 일정목록 구하기
+       String year=request.getParameter("year");
+       String month=request.getParameter("month");
+      
+       if(year==null||month==null) {
+          Calendar cal=Calendar.getInstance();
+          year=cal.get(Calendar.YEAR)+"";
+          month=(cal.get(Calendar.MONTH)+1)+"";
+       }
+       System.out.println("year:"+year);
+       System.out.println("month:"+month);
+       //달력만들기위한 값 구하기
+       Map<String, Integer>map=calService.makeCalendar(request);
+       model.addAttribute("calMap", map);
+       model.addAttribute("email",email);
+       String yyyyMM=year+Util.isTwo(month);//202311 6자리변환
+//       List<CalDto>clist=calService.usercalViewList(yyyyMM, email);
+//       System.out.println(clist);
+//       
+//       
+//       model.addAttribute("clist", clist);
+      
+       return "user/userCal";
+    }
        @ResponseBody
        @GetMapping(value = "/cal", produces = "application/json")
        public ResponseEntity<List<Map<String,String>>> cal(String sgguCd, String dgsbjtCd, String ykiho) throws IOException, ParserConfigurationException {

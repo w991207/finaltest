@@ -7,7 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -257,6 +259,21 @@ public class BankingController {
       return totalMoney;
    }
 
+   
+   @ResponseBody
+   @GetMapping(value = "/CheckAccount")
+   public Map<String, String> idChk(String fintech_use_num){
+      System.out.println("계좌중복체크");
+      
+      String resultAccount = userService.CheckAccount(fintech_use_num);
+      
+      // json 객체로 보내기 위해 Map에 담아서 응답
+      // text라면 그냥 String 으로 보내도 됨
+      Map<String, String> map = new HashMap<>();
+      map.put("fintech_use_num", resultAccount);
+      
+      return map;
+   }
    
    
    

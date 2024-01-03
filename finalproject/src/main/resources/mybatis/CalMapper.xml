@@ -46,7 +46,16 @@
              ) cal
       WHERE rn BETWEEN 1 AND 3
    </select>
-   
+   <select id="usercalViewList" parameterType="Map" resultType="CalDto">
+      SELECT rn, seq, email,title,content, mdate, regdate   
+      from   (SELECT ROW_NUMBER() over(PARTITION BY SUBSTR(mdate,1,8)
+                                      ORDER BY mdate) rn
+                , seq, email,title,content, mdate, regdate
+             FROM reserveboard
+             WHERE email = #{email} AND SUBSTR(mdate,1,6)=#{yyyyMM} 
+             ) cal
+      WHERE rn BETWEEN 1 AND 3
+   </select>
    <select id="calBoardCount" parameterType="Map"
          resultType="Integer">
       SELECT COUNT(*) FROM reserveboard

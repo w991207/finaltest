@@ -6,107 +6,139 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
  <style type="text/css">
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-        }
+#list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    margin-top: 20px;
+}
 
-        #list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-            margin-top: 20px; /* Added margin-top */
-        }
+.box {
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: auto;
+}
 
-        .box {
-            width: 300px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            margin: 10px;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: auto;
-        }
+h1 {
+    font-size: 24px;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.sub_menu {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.balance {
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.balance:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.balance:hover {
+    background-color: #2078c3;
+}
+
+.balance_amt {
+    margin-top: 10px;
+}
+
+.addAccount {
+    margin-top: 20px;
+}
+
+.addAccount button {
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addAccount button:hover {
+    background-color: #2078c3;
+}
 
 
-
-        p {
-            font-size: 14px;
-            margin: 5px 0;
-        }
-
-        .sub_menu {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .balance {
-            padding: 10px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .balance_amt {
-            margin-top: 10px;
-        }
-
-        button {
-            padding: 10px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
+        
     </style>
 <script type="text/javascript">
 //나의 정보조회[계좌목록]
 onload=function myInfo(){
    $.ajax({
-//         url:"https://testapi.openbanking.or.kr/v2.0/user/me",
-//         headers:{"Authorization":"Bearer token"},
-//         data:{"user_seq_no":"사용자번호"}
       url:"/banking/myinfo",
       method:"get",
       dataType:"json",
       success:function(data){
          console.log(data.res_list);
          var res_list=data.res_list;//나의 계좌목록 저장
-         
-//          //계좌등록 버튼
-//          $("#list").html("<div class='addAccount'>"
-//                      +"  <button onclick='addAccount()'>계좌등록</button>"
-//                      +"</div>"
-//                        );
+
          
          //출력할 내용
          //계좌이름
          //핀테크이용번호 [은행이름]
          for (var i = 0; i < res_list.length; i++) {
-            $("#list").append(
-               '<div class="box container">'
-                   +'   <div>'
-                   +'      <h1>'+res_list[i].account_alias+'</h1>'
-                   +'      <p>'+res_list[i].fintech_use_num+' 계좌번호 : ' + res_list[i].account_num_masked + ' ['+res_list[i].bank_name+']</p>'
-                   +'   </div>'
-                   +'   <div class="sub_menu"> '
-                   +'      <button  onclick="insertaccount(\''+res_list[i].fintech_use_num+'\',this)" class="balance">계좌 인증</button>'
-                   +'   </div>'
-                   +'   <div class="balance_amt"></div>'
-                   +'</div>   '
-            )
+            $.ajax({
+               url:"/banking/CheckAccount",
+                 method:"get",
+                 dataType:"json",
+                 async:false,
+                 data:{"fintech_use_num":res_list[i].fintech_use_num},
+                 success:function(data){
+                    if(data.fintech_use_num==null){ // 등록되지 않은 계좌
+                       $("#list").append(
+                                 '<div class="box container">'
+                                     +'   <div>'
+                                     +'      <h1>'+res_list[i].account_alias+'</h1>'
+                                     +'      <p>'+res_list[i].fintech_use_num+' 계좌번호 : ' + res_list[i].account_num_masked + ' ['+res_list[i].bank_name+']</p>'
+                                     +'   </div>'
+                                     +'   <div class="sub_menu"> '
+                                     +'      <button  onclick="insertaccount(\''+res_list[i].fintech_use_num+'\',this)" class="balance">계좌 인증</button>'
+                                     +'   </div>'
+                                     +'   <div class="balance_amt"></div>'
+                                     +'</div>   '
+                              )
+                  }else{  // 등록된 계좌
+                      $("#list").append(
+                               '<div class="box container">'
+                                   +'   <div>'
+                                   +'      <h1>'+res_list[i].account_alias+'</h1>'
+                                   +'      <p>'+res_list[i].fintech_use_num+' 계좌번호 : ' + res_list[i].account_num_masked + ' ['+res_list[i].bank_name+']</p>'
+                                   +'   </div>'
+                                   +'   <div class="sub_menu"> '
+                                   +'      <button  onclick="insertaccount(\''+res_list[i].fintech_use_num+'\',this)" class="balance" disabled="disabled">인증 완료</button>'
+                                   +'   </div>'
+                                   +'   <div class="balance_amt"></div>'
+                                   +'</div>   '
+                            )
+                  }
+                 }
+            });
+            
          }
          
          $("#list").append('<div class="addAccount">'
@@ -150,11 +182,8 @@ function addAccount(){
 }
 </script>
 <style type="text/css">
- #list > p{
 
-    float: right;
-    font-size: 50px;
- }
+ 
 </style>
 </head>
 <body>

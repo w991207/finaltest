@@ -75,7 +75,9 @@ public class UserService {
       return userMapper.getMyAccount(userseqno);
    }
    
-   
+   public String CheckAccount(String fintech_use_num) {
+         return userMapper.CheckAccount(fintech_use_num);
+      }
    
    
    

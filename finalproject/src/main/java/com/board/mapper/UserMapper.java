@@ -28,5 +28,6 @@ public interface UserMapper {
       
       public int totalMoney(int userseqno);
 
+      public String CheckAccount(String fintech_use_num);
       
 }

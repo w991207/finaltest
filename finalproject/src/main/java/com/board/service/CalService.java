@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.board.mapper.CalMapper;
 import com.board.utils.Util;
 import com.board.command.InsertCalCommand;
+import com.board.command.UserUpdateCommand;
 import com.board.dtos.CalDto;
+import com.board.dtos.UserDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -30,9 +32,9 @@ public class CalService {
       //달력의 날짜를 바꾸기 위해 전달된 year와 month 파라미터를 받는 코드
       String paramYear=request.getParameter("year");
       String paramMonth=request.getParameter("month");
-      
       Calendar cal=Calendar.getInstance(); // 추상클래스이고, static 메서드 new(X)
-      
+      UserDto udto = (UserDto)request.getSession().getAttribute("ldto");
+      String email = udto.getEmail();
       int   year=(paramYear==null)?cal.get(Calendar.YEAR):Integer.parseInt(paramYear) ;
       int   month=(paramMonth==null)?cal.get(Calendar.MONTH)+1:Integer.parseInt(paramMonth) ;                  
       
@@ -56,7 +58,12 @@ public class CalService {
       
       //2.월의 마지막 날 구하기
       int lastDay=cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-      
+      String yyyyMM=year+Util.isTwo(month+"");//202311 6자리변환
+
+      System.out.println(email);
+	  List<CalDto>clist=usercalViewList(yyyyMM, email);
+      request.setAttribute("clist", clist);
+      System.out.println(clist);
       map.put("year", year);
       map.put("month", month);
       map.put("dayOfWeek", dayOfWeek);
@@ -68,7 +75,9 @@ public class CalService {
    public List<CalDto> calViewList(String yyyyMM,String ykiho){
       return calmapper.calViewList(yyyyMM, ykiho);
    }
-   
+   public List<CalDto> usercalViewList(String yyyyMM,String email){
+	      return calmapper.usercalViewList(yyyyMM, email);
+	   }
    public boolean pay(String fintech_use_num, int money) {
       Map<String, Object> map = new HashMap<>();
       map.put("fintech_use_num", fintech_use_num);
