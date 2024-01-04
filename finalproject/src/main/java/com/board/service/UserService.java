@@ -52,32 +52,33 @@ public class UserService {
       return userMapper.userReserve(email);
    }
    
-   public boolean addAccount(String money, String fintech_use_num, String bank_name, int userseqno) {
+   public boolean addAccount(String money, String fintech_use_num, String bank_name, int userseqno, String account_num_masked) {
          Map<String, Object>map=new HashMap<>();
          map.put("money", money);
          map.put("fintech_use_num", fintech_use_num);
          map.put("bank_name", bank_name);
          map.put("userseqno", userseqno);
+         map.put("account_num_masked", account_num_masked);
          int count = userMapper.addAccount(map);
          return count>0?true:false;
       }
    
    
    public int totalMoney(HttpServletRequest requset) {
-         UserDto udto = (UserDto)requset.getSession().getAttribute("ldto");
-         int userseqno = udto.getUserseqno();
-         return userMapper.totalMoney(userseqno);
-      }
+	      UserDto udto = (UserDto)requset.getSession().getAttribute("ldto");
+	      int userseqno = udto.getUserseqno();
+	      return userMapper.totalMoney(userseqno);
+	   }
 
    
    public List<AccountDto> getMyAccount(int userseqno){
-      System.out.println("service까지"+userseqno);
-      return userMapper.getMyAccount(userseqno);
+	   System.out.println("service까지"+userseqno);
+	   return userMapper.getMyAccount(userseqno);
    }
    
    public String CheckAccount(String fintech_use_num) {
-         return userMapper.CheckAccount(fintech_use_num);
-      }
+	      return userMapper.CheckAccount(fintech_use_num);
+	   }
    
    
    

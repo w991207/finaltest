@@ -8,7 +8,7 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript">
 onload = function myInfo() {
-   alert("사용금액을 먼저 입력해주세요");
+	alert("사용금액을 먼저 입력해주세요");
     function updateRemainingBalance() {
         var currentBalance = parseFloat($("#currentBalance").val());
         var usageAmount = parseFloat($("#usage").val());
@@ -27,7 +27,7 @@ onload = function myInfo() {
             $.each(data, function(index, account) {
                 var option = $("<option>");
                 option.val(account.money);
-                option.text(account.fintech_use_num + ' [' + account.bank_name + ']');
+                option.text(account.account_num_masked + ' [' + account.bank_name + ']');
                 accountDropdown.append(option);
             });
             accountDropdown.change(function() {

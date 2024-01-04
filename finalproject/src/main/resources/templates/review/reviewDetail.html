@@ -47,10 +47,6 @@
                         const addValue = data.list[i].email + " | " + data.list[i].content;
                         const li = $("<li>").text(addValue).addClass("comment");
 
-                        // Hide additional comments initially
-                        if (i >= 5) {
-                            li.addClass("hidden");
-                        }
 
                         replyContainer.append(li);
                     }

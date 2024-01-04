@@ -5,86 +5,91 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
- <style type="text/css">
-#list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px;
-    margin-top: 20px;
-}
+    <style type="text/css">
+        body {
+            background-color: #f2f2f2;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-.box {
-    width: 300px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin: 10px;
-    padding: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: auto;
-}
+        #list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            margin-top: 20px;
+        }
 
-h1 {
-    font-size: 24px;
-    color: #3498db;
-    margin-bottom: 10px;
-}
+        .box {
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+        }
 
-p {
-    font-size: 14px;
-    margin: 5px 0;
-    color: #555;
-}
+        h1 {
+            font-size: 24px;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
 
-.sub_menu {
-    margin-top: 10px;
-    text-align: center;
-}
+        p {
+            font-size: 14px;
+            margin: 5px 0;
+            color: #555;
+        }
 
-.balance {
-    padding: 10px;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        .sub_menu {
+            margin-top: 10px;
+            text-align: center;
+        }
 
-.balance:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
+        .balance {
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-.balance:hover {
-    background-color: #2078c3;
-}
+        .balance:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
 
-.balance_amt {
-    margin-top: 10px;
-}
+        .balance:hover {
+            background-color: #2078c3;
+        }
 
-.addAccount {
-    margin-top: 20px;
-}
+        .balance_amt {
+            margin-top: 10px;
+        }
 
-.addAccount button {
-    padding: 10px;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        .addAccount {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-.addAccount button:hover {
-    background-color: #2078c3;
-}
+        .addAccount button {
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-
-        
+        .addAccount button:hover {
+            background-color: #2078c3;
+        }
     </style>
 <script type="text/javascript">
 //나의 정보조회[계좌목록]
@@ -111,11 +116,13 @@ onload=function myInfo(){
                  success:function(data){
                     if(data.fintech_use_num==null){ // 등록되지 않은 계좌
                        $("#list").append(
-                                 '<div class="box container">'
-                                     +'   <div>'
-                                     +'      <h1>'+res_list[i].account_alias+'</h1>'
-                                     +'      <p>'+res_list[i].fintech_use_num+' 계좌번호 : ' + res_list[i].account_num_masked + ' ['+res_list[i].bank_name+']</p>'
-                                     +'   </div>'
+                                   '<div class="box container">'
+                                   + '   <div>'
+                                   + '      <h1>' + res_list[i].account_alias + '</h1>'
+                                   + '      <p class="fintech" style="display: none;">' + res_list[i].fintech_use_num + '</p>'
+                                   + '      <p class="bank-name" style="font-weight: bold;">은행이름 : ' + res_list[i].bank_name + '</p>'
+                                   + '      <p class="account-number">계좌번호 : ' + res_list[i].account_num_masked + '</p>'
+                                   + '   </div>'
                                      +'   <div class="sub_menu"> '
                                      +'      <button  onclick="insertaccount(\''+res_list[i].fintech_use_num+'\',this)" class="balance">계좌 인증</button>'
                                      +'   </div>'
@@ -194,4 +201,4 @@ function addAccount(){
    </div>
 </div>
 </body>
-</html>
+</html>   

@@ -131,14 +131,14 @@ public class BankingController {
    
    @ResponseBody
    @GetMapping("/insertaccount")
-   public JSONObject insertaccount(String fintech_use_num, HttpServletRequest request) throws IOException, ParseException {
+   public JSONObject insertaccount(String fintech_use_num, String account_num_masked, HttpServletRequest request) throws IOException, ParseException {
       System.out.println("계좌등록");
       HttpURLConnection conn=null;
       JSONObject result=null;
 
       HttpSession session=request.getSession();
       UserDto ldto=(UserDto)session.getAttribute("ldto");
-      System.out.println(fintech_use_num);
+      System.out.println(account_num_masked);
       int userseqno = ldto.getUserseqno();
       HttpSession session1=request.getSession();
       AccountDto adto=(AccountDto)session1.getAttribute("adto");
@@ -167,7 +167,7 @@ public class BankingController {
       result=(JSONObject)new JSONParser().parse(response.toString());
       String money=result.get("balance_amt").toString();
       String bank_name=result.get("bank_name").toString();
-      userService.addAccount(money, fintech_use_num, bank_name, userseqno);
+      userService.addAccount(money, fintech_use_num, bank_name, userseqno, account_num_masked);
 
       return result;
    }
@@ -233,17 +233,17 @@ public class BankingController {
    @ResponseBody
   @GetMapping("/getMyAccount")
    public List<AccountDto> getMyAccount(Model model, HttpServletRequest request) {
-     System.out.println("내 계좌 불러오기");
-     HttpSession session = request.getSession();
-     UserDto ldto=(UserDto)session.getAttribute("ldto");
-     int userseqno = ldto.getUserseqno();
-     System.out.println(userseqno);
-     
-     List<AccountDto> list = userService.getMyAccount(userseqno);
-     System.out.println(list);
-     model.addAttribute("list", list);
-     
-     return list; 
+	  System.out.println("내 계좌 불러오기");
+	  HttpSession session = request.getSession();
+	  UserDto ldto=(UserDto)session.getAttribute("ldto");
+	  int userseqno = ldto.getUserseqno();
+	  System.out.println(userseqno);
+	  
+	  List<AccountDto> list = userService.getMyAccount(userseqno);
+	  System.out.println(list);
+	  model.addAttribute("list", list);
+	  
+	  return list; 
   }
    
    
